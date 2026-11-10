@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فروشگاه میمنه | خرید آنلاین</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f5f7f3;color:#26352c}
+header{background:#12633e;color:white;padding:20px 15px}
+.container{max-width:1100px;margin:auto;padding:0 15px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{font-size:25px;font-weight:bold}
+.logo small{display:block;font-size:12px;font-weight:normal;color:#d8eee0}
+.cart{background:#f4c75e;color:#26352c;padding:11px 15px;border:0;border-radius:10px;font-weight:bold;cursor:pointer}
+.hero{padding:35px 0;display:grid;grid-template-columns:1.5fr 1fr;gap:20px;align-items:center}
+.hero h1{font-size:34px;margin:0 0 10px}
+.hero p{line-height:2;color:#e2f1e7}
+.hero-box{background:#fff1cf;color:#39503b;border-radius:18px;padding:25px;text-align:center;font-size:20px;font-weight:bold}
+.search{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;font-size:16px;margin:20px 0}
+h2{font-size:22px}
+.categories{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0 25px}
+.categories button{padding:9px 15px;border:1px solid #176b45;background:white;color:#176b45;border-radius:25px;cursor:pointer}
+.categories button.active{background:#176b45;color:white}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.product{background:white;border-radius:15px;padding:14px;box-shadow:0 3px 12px #0000000d}
+.photo{height:110px;background:#edf5ee;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:48px}
+.product h3{margin:10px 0 5px;font-size:17px}
+.price{color:#176b45;font-weight:bold}
+.add{width:100%;background:#218653;color:white;border:0;padding:11px;border-radius:9px;margin-top:10px;cursor:pointer;font-size:14px}
+footer{background:#123f2c;color:white;text-align:center;padding:25px;margin-top:35px;line-height:2}
+.notice{background:#fff8e5;border:1px solid #e8d79e;border-radius:12px;padding:12px;margin-top:25px;font-size:13px;line-height:2}
+@media(max-width:750px){.hero{grid-template-columns:1fr}.products{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:27px}}
+@media(max-width:380px){.products{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+<div class="top">
+<div class="logo">فروشگاه میمنه<small>خرید آسان، انتخاب مطمئن</small></div>
+<button class="cart" onclick="showCart()">🛒 سبد خرید (<span id="count">0</span>)</button>
+</div>
+<div class="hero">
+<div>
+<h1>به فروشگاه میمنه خوش آمدید</h1>
+<p>محصولات مورد نیاز خانه و خانواده را آسان پیدا کنید و در سبد خرید خود اضافه نمایید.</p>
+</div>
+<div class="hero-box">🌿 خرید آسان و سریع<br><br>🛍️ محصولات متنوع</div>
+</div>
+</div>
+</header>
+
+<main class="container">
+<input class="search" id="search" placeholder="🔍 جستجوی محصولات..." oninput="render()">
+
+<h2>دسته‌بندی محصولات</h2>
+<div class="categories" id="categories"></div>
+
+<h2>محصولات فروشگاه</h2>
+<div class="products" id="products"></div>
+
+<div class="notice">
+<strong>توجه:</strong> این نسخه آزمایشی است. نام محصولات و قیمت‌ها نمونه هستند. ثبت سفارش واقعی و پرداخت آنلاین هنوز فعال نشده است.
+</div>
+</main>
+
+<footer>
+<strong>فروشگاه میمنه</strong><br>
+خدمات خرید و فروش محصولات در میمنه، افغانستان<br>
+© تمامی حقوق محفوظ است.
+</footer>
+
+<script>
+const items=[
+{name:"برنج",cat:"مواد خوراکی",price:"قیمت نمونه",emoji:"🍚"},
+{name:"روغن خوراکی",cat:"مواد خوراکی",price:"قیمت نمونه",emoji:"🫗"},
+{name:"آرد",cat:"مواد خوراکی",price:"قیمت نمونه",emoji:"🌾"},
+{name:"شکر",cat:"مواد خوراکی",price:"قیمت نمونه",emoji:"🍬"},
+{name:"شیر",cat:"لبنیات",price:"قیمت نمونه",emoji:"🥛"},
+{name:"ماست",cat:"لبنیات",price:"قیمت نمونه",emoji:"🥣"},
+{name:"پنیر",cat:"لبنیات",price:"قیمت نمونه",emoji:"🧀"},
+{name:"چای",cat:"نوشیدنی",price:"قیمت نمونه",emoji:"🍵"},
+{name:"آب معدنی",cat:"نوشیدنی",price:"قیمت نمونه",emoji:"💧"},
+{name:"بیسکویت",cat:"تنقلات",price:"قیمت نمونه",emoji:"🍪"},
+{name:"مایع ظرف‌شویی",cat:"شوینده",price:"قیمت نمونه",emoji:"🧴"},
+{name:"پودر لباس‌شویی",cat:"شوینده",price:"قیمت نمونه",emoji:"🫧"}
+];
+
+let selected="همه";
+let basket=[];
+const cats=["همه",...new Set(items.map(x=>x.cat))];
+
+function drawCats(){
+document.getElementById("categories").innerHTML=cats.map(c=>
+`<button class="${selected===c?"active":""}" onclick="selected='${c}';drawCats();render()">${c}</button>`
+).join("");
+}
+
+function render(){
+const q=document.getElementById("search").value.trim().toLowerCase();
+const list=items.filter(x=>(selected==="همه"||x.cat===selected)&&x.name.toLowerCase().includes(q));
+document.getElementById("products").innerHTML=list.map((x,i)=>
+`<div class="product">
+<div class="photo">${x.emoji}</div>
+<h3>${x.name}</h3>
+<div class="price">${x.price}</div>
+<button class="add" onclick="addToCart('${x.name}')">افزودن به سبد خرید</button>
+</div>`
+).join("")||"<p>محصولی پیدا نشد.</p>";
+}
+
+function addToCart(name){
+basket.push(name);
+document.getElementById("count").textContent=basket.length;
+alert(name+" به سبد خرید اضافه شد.");
+}
+
+function showCart(){
+if(basket.length===0){
+alert("سبد خرید شما خالی است.");
+return;
+}
+alert("محصولات انتخاب‌شده:\n"+basket.join("\n")+"\n\nاین نسخه آزمایشی است و ثبت سفارش واقعی هنوز فعال نیست.");
+}
+
+drawCats();
+render();
+</script>
+</body>
+</html>
